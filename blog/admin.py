@@ -1,4 +1,7 @@
 from django.contrib import admin
-from .models import Post
+#from django.contrib import session
+from .models import TabUsuario
+from .models import TabEventos
 
-admin.site.register(Post)
+admin.site.register(TabUsuario)
+admin.site.register(TabEventos)

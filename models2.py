@@ -6,7 +6,143 @@
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
-from django.utils import timezone
+
+
+class AuthGroup(models.Model):
+    name = models.CharField(unique=True, max_length=80)
+
+    class Meta:
+        managed = False
+        db_table = 'auth_group'
+
+
+class AuthGroupPermissions(models.Model):
+    group = models.ForeignKey(AuthGroup, models.DO_NOTHING)
+    permission = models.ForeignKey('AuthPermission', models.DO_NOTHING)
+
+    class Meta:
+        managed = False
+        db_table = 'auth_group_permissions'
+        unique_together = (('group', 'permission'),)
+
+
+class AuthPermission(models.Model):
+    name = models.CharField(max_length=255)
+    content_type = models.ForeignKey('DjangoContentType', models.DO_NOTHING)
+    codename = models.CharField(max_length=100)
+
+    class Meta:
+        managed = False
+        db_table = 'auth_permission'
+        unique_together = (('content_type', 'codename'),)
+
+
+class AuthUser(models.Model):
+    password = models.CharField(max_length=128)
+    last_login = models.DateTimeField(blank=True, null=True)
+    is_superuser = models.BooleanField()
+    username = models.CharField(unique=True, max_length=150)
+    first_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=150)
+    email = models.CharField(max_length=254)
+    is_staff = models.BooleanField()
+    is_active = models.BooleanField()
+    date_joined = models.DateTimeField()
+
+    class Meta:
+        managed = False
+        db_table = 'auth_user'
+
+
+class AuthUserGroups(models.Model):
+    user = models.ForeignKey(AuthUser, models.DO_NOTHING)
+    group = models.ForeignKey(AuthGroup, models.DO_NOTHING)
+
+    class Meta:
+        managed = False
+        db_table = 'auth_user_groups'
+        unique_together = (('user', 'group'),)
+
+
+class AuthUserUserPermissions(models.Model):
+    user = models.ForeignKey(AuthUser, models.DO_NOTHING)
+    permission = models.ForeignKey(AuthPermission, models.DO_NOTHING)
+
+    class Meta:
+        managed = False
+        db_table = 'auth_user_user_permissions'
+        unique_together = (('user', 'permission'),)
+
+
+class BlogPost(models.Model):
+    title = models.CharField(max_length=200)
+    text = models.TextField()
+    created_date = models.DateTimeField()
+    published_date = models.DateTimeField(blank=True, null=True)
+    author = models.ForeignKey(AuthUser, models.DO_NOTHING)
+
+    class Meta:
+        managed = False
+        db_table = 'blog_post'
+
+
+class DjangoAdminLog(models.Model):
+    action_time = models.DateTimeField()
+    object_id = models.TextField(blank=True, null=True)
+    object_repr = models.CharField(max_length=200)
+    action_flag = models.SmallIntegerField()
+    change_message = models.TextField()
+    content_type = models.ForeignKey('DjangoContentType', models.DO_NOTHING, blank=True, null=True)
+    user = models.ForeignKey(AuthUser, models.DO_NOTHING)
+
+    class Meta:
+        managed = False
+        db_table = 'django_admin_log'
+
+
+class DjangoContentType(models.Model):
+    app_label = models.CharField(max_length=100)
+    model = models.CharField(max_length=100)
+
+    class Meta:
+        managed = False
+        db_table = 'django_content_type'
+        unique_together = (('app_label', 'model'),)
+
+
+class DjangoMigrations(models.Model):
+    app = models.CharField(max_length=255)
+    name = models.CharField(max_length=255)
+    applied = models.DateTimeField()
+
+    class Meta:
+        managed = False
+        db_table = 'django_migrations'
+
+
+class DjangoSession(models.Model):
+    session_key = models.CharField(primary_key=True, max_length=40)
+    session_data = models.TextField()
+    expire_date = models.DateTimeField()
+
+    class Meta:
+        managed = False
+        db_table = 'django_session'
+
+
+class Dtproperties(models.Model):
+    id = models.IntegerField()
+    objectid = models.IntegerField(blank=True, null=True)
+    property = models.CharField(max_length=64)
+    value = models.CharField(max_length=255, blank=True, null=True)
+    uvalue = models.CharField(max_length=255, blank=True, null=True)
+    lvalue = models.BinaryField(blank=True, null=True)
+    version = models.IntegerField()
+
+    class Meta:
+        managed = False
+        db_table = 'dtproperties'
+
 
 class TabAcaoResp(models.Model):
     pk_acao_resp = models.AutoField(primary_key=True)
@@ -263,7 +399,7 @@ class TabEmailTipo(models.Model):
 
 
 class TabEmpresas(models.Model):
-    pk_empresa = models.AutoField(primary_key=True)
+    pk_empresa = models.ForeignKey('self', models.DO_NOTHING, db_column='pk_empresa', primary_key=True)
     fk_usuario_origem = models.IntegerField(blank=True, null=True)
     fk_usuario = models.IntegerField(blank=True, null=True)
     nome_empresa = models.CharField(max_length=100, blank=True, null=True)
@@ -283,9 +419,6 @@ class TabEmpresas(models.Model):
     class Meta:
         managed = False
         db_table = 'tab_empresas'
-		
-    def __str__(self):
-        return self.nome_empresa
 
 
 class TabEventos(models.Model):
@@ -319,12 +452,6 @@ class TabEventos(models.Model):
         managed = False
         db_table = 'tab_eventos'
 
-    def __str__(self):
-        return self.desc_evento + ' ' + str(self.data_evento)
-
-
-		
-		
 
 class TabImagens(models.Model):
     pk_imagem = models.AutoField(primary_key=True)
@@ -362,7 +489,7 @@ class TabLanguage(models.Model):
 
 
 class TabLogsystem(models.Model):
-    pk_logsystem = models.AutoField(primary_key=True)
+    pk_logsystem = models.AutoField()
     dh_logsystem = models.DateTimeField()
     fk_tipolog = models.IntegerField(blank=True, null=True)
     fk_usuario = models.IntegerField(blank=True, null=True)
@@ -553,24 +680,3 @@ class TabUsuario(models.Model):
         managed = False
         db_table = 'tab_usuario'
         unique_together = (('pk_usuario', 'usuario'),)
-		
-    def __str__(self):
-        return self.nome_completo
-
-		
-		
-class Post(models.Model):
-    author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
-    title = models.CharField(max_length=200)
-    text = models.TextField()
-    created_date = models.DateTimeField(
-            default=timezone.now)
-    published_date = models.DateTimeField(
-            blank=True, null=True)
-
-    def publish(self):
-        self.published_date = timezone.now()
-        self.save()
-
-    def __str__(self):
-        return self.title

@@ -7,15 +7,20 @@
             <h1><a href="/">Título</a></h1>
         </div>
 
+		<!--
 		
-		
-		{% for post in posts %}
+		{% for u in usuarios %}
 			<div>
-				<p>publicado em: {{ post.published_date }}</p>
-				<h1><a href="">{{ post.title }}</a></h1>
-				<p>{{ post.text|linebreaksbr }}</p>
+				<p>Nome Completo: {{ u.nome_completo }}
+				<a href="">{{ u.email }}</a></p>
+				
 			</div>
 		{% endfor %}
+		
+		//-->
+		
+		<div>
+		</div>
 		
     </body>
 </html>
