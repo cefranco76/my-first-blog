@@ -320,7 +320,7 @@ class TabEventos(models.Model):
         db_table = 'tab_eventos'
 
     def __str__(self):
-        return self.desc_evento + ' ' + str(self.data_evento)
+        return str(self.desc_evento)
 
 
 		
@@ -328,7 +328,7 @@ class TabEventos(models.Model):
 
 class TabImagens(models.Model):
     pk_imagem = models.AutoField(primary_key=True)
-    fk_evento = models.IntegerField(blank=True, null=True)
+    fk_evento = models.ForeignKey(TabEventos, models.DO_NOTHING, db_column='fk_evento', blank=True, null=True)
     titulo_imagem = models.CharField(max_length=50, blank=True, null=True)
     desc_imagem = models.CharField(max_length=50, blank=True, null=True)
     caminho_thumb = models.CharField(max_length=250, blank=True, null=True)
@@ -349,6 +349,9 @@ class TabImagens(models.Model):
     class Meta:
         managed = False
         db_table = 'tab_imagens'
+		
+    def __str__(self):
+        return str(self.titulo_imagem)
 
 
 class TabLanguage(models.Model):
@@ -556,8 +559,6 @@ class TabUsuario(models.Model):
 		
     def __str__(self):
         return self.nome_completo
-
-		
 		
 class Post(models.Model):
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE)

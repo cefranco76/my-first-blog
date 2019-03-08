@@ -1,26 +1,13 @@
-<html>
-    <head>
-        <title>Título</title>
-    </head>
-    <body>
-        <div>
-            <h1><a href="/">Título</a></h1>
-        </div>
+{% extends 'blog/base.html' %}
 
-		<!--
-		
-		{% for u in usuarios %}
-			<div>
-				<p>Nome Completo: {{ u.nome_completo }}
-				<a href="">{{ u.email }}</a></p>
-				
+{% block content %}
+	{% for post in posts %}
+		<div class="post">
+			<div class="date">
+				<p>published: {{ post.published_date }}</p>
 			</div>
-		{% endfor %}
-		
-		//-->
-		
-		<div>
+			<h1><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h1>
+			<p>{{ post.text|linebreaksbr }}</p>
 		</div>
-		
-    </body>
-</html>
+	{% endfor %}
+{% endblock %}

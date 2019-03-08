@@ -83,18 +83,20 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 #}
 
 DATABASES = {
+    
+	#'default': {
+    #    'ENGINE': 'sql_server.pyodbc',
+    #    'NAME': 'eduardofranco',
+	#	
+	#	'HOST': 'mssql.eduardofranco.com.br',
+	#	'USER': 'eduardofranco',
+	#	'PASSWORD': 'Edu@3141592',
+    #    'OPTIONS': {
+    #        'driver': 'SQL Server Native Client 11.0',
+    #    },
+    #},
+	
     'default': {
-        'ENGINE': 'sql_server.pyodbc',
-        'NAME': 'eduardofranco',
-		
-		'HOST': 'mssql.eduardofranco.com.br',
-		'USER': 'eduardofranco',
-		'PASSWORD': 'Edu@3141592',
-        'OPTIONS': {
-            'driver': 'SQL Server Native Client 11.0',
-        },
-    },
-    'dataBase2': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
