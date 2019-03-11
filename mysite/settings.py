@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '3m0k(&ctw2fl2c0t-2fgvy_imdh4@b=&=-jrp4+8i1u7s78rt&'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 
 ALLOWED_HOSTS = ['127.0.0.1', '.pythonanywhere.com']
@@ -95,12 +95,15 @@ DATABASES = {
     #        'driver': 'SQL Server Native Client 11.0',
     #    },
     #},
-	
+
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
+	
 }
+
+
 
 
 
