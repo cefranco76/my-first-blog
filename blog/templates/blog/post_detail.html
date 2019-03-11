@@ -4,14 +4,21 @@
     <div class="post">
 	
         {% if post.published_date %}
-            <div class="date">
+            <div class="date">Published date:
                 {{ post.published_date }}
             </div>
+        {% else %}
+            <div class="date">Created date: 
+                {{ post.created_date }}
+            </div>
         {% endif %}
-		{% if user.is_authenticated %}
-		<a class="btn btn-default" href="{% url 'post_edit' pk=post.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
-		{% endif %}
+
         <h1>{{ post.title }}</h1>
         <p>{{ post.text|linebreaksbr }}</p>
+		
+		<a class="btn btn-default" href="{% url 'post_edit' pk=post.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
+		<a class="btn btn-default" href="{% url 'post_publish' pk=post.pk %}">Publish</a>
+		<a class="btn btn-default" href="{% url 'post_remove' pk=post.pk %}"><span class="glyphicon glyphicon-remove"></span></a>
+		
     </div>
 {% endblock %}
