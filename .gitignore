@@ -1,7 +1,9 @@
+.pytest_cache
+*.pytest_cache
 *.pyc
 *~
 __pycache__
 myvenv
-*.sqlite3
+db.sqlite3
 /static
 .DS_Store
