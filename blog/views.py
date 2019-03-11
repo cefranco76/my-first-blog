@@ -15,7 +15,7 @@ def usuarios_list(request):
     return render(request, 'blog/usuarios.html', {'usuarios': usuarios})
      
 def post_list(request): 
-    posts = Post.objects.order_by('published_date') 
+    posts = Post.objects.filter(published_date__isnull=False).order_by('published_date') 
     return render(request, 'blog/post_list.html', {'posts':posts})     
      
 def post_draft_list(request): 
